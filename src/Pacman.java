@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.HashSet;
+import java.util.Random;
 import javax.swing.*;
 public class Pacman extends JPanel{
     class Block{
@@ -12,6 +14,7 @@ public class Pacman extends JPanel{
         int startx;
         int starty;
         Block(Image image,int x,int y,int width,int height){
+            this.image=image;
             this.x=x;
             this.y=y;
             this.width=width;
@@ -36,10 +39,6 @@ public class Pacman extends JPanel{
     private Image pacmandown;
     private Image pacmanleft;
     private Image pacmanright;
-    HashSet<Block> walls;
-    HashSet<Block> foods;
-    HashSet<Block> ghosts;
-    Block pacman;
     //X = wall, O = skip, P = pac man, ' ' = food
     //Ghosts: b = blue, o = orange, p = pink, r = red
     private String[] tileMap = {
@@ -65,18 +64,22 @@ public class Pacman extends JPanel{
         "X                 X",
         "XXXXXXXXXXXXXXXXXXX" 
     };
+    HashSet<Block> walls;
+    HashSet<Block> foods;
+    HashSet<Block> ghosts;
+    Block pacman;
     Pacman(){
         setPreferredSize(new Dimension(boardwidth,boardheight));
         setBackground(Color.BLACK);
-        wallImage=new ImageIcon(getClass().getResource("/images/wall.png")).getImage();
-        blueghost=new ImageIcon(getClass().getResource("/images/blueGhost.png")).getImage();
-        redghost=new ImageIcon(getClass().getResource("/images/redGhost.png")).getImage();
-        pinkghost=new ImageIcon(getClass().getResource("/images/pinkGhost.png")).getImage();
-        orangeghost=new ImageIcon(getClass().getResource("/images/orangeGhost.png")).getImage();
-        pacmanUp=new ImageIcon(getClass().getResource("/images/pacmanUp.png")).getImage();
-        pacmandown=new ImageIcon(getClass().getResource("/images/pacmanDown.png")).getImage();
-        pacmanleft=new ImageIcon(getClass().getResource("/images/pacmanLeft.png")).getImage();
-        pacmanright=new ImageIcon(getClass().getResource("/images/pacmanRight.png")).getImage();
+        wallImage=new ImageIcon(getClass().getResource("./wall.png")).getImage();
+        blueghost=new ImageIcon(getClass().getResource("./blueGhost.png")).getImage();
+        redghost=new ImageIcon(getClass().getResource("./redGhost.png")).getImage();
+        pinkghost=new ImageIcon(getClass().getResource("./pinkGhost.png")).getImage();
+        orangeghost=new ImageIcon(getClass().getResource("./orangeGhost.png")).getImage();
+        pacmanUp=new ImageIcon(getClass().getResource("./pacmanUp.png")).getImage();
+        pacmandown=new ImageIcon(getClass().getResource("./pacmanDown.png")).getImage();
+        pacmanleft=new ImageIcon(getClass().getResource("./pacmanLeft.png")).getImage();
+        pacmanright=new ImageIcon(getClass().getResource("./pacmanRight.png")).getImage();
 
         loadmap();
     }
@@ -95,19 +98,19 @@ public class Pacman extends JPanel{
                     walls.add(wall);
                 }
                 else if(tilemapchar=='b'){//blueghost
-                    Block ghost=new Block(blueghost, x, y, x, y);
+                    Block ghost=new Block(blueghost, x, y, tilesize,tilesize);
                     ghosts.add(ghost);
                 }
                 else if(tilemapchar=='o'){//oranegghost
-                    Block ghost=new Block(orangeghost, x, y, x, y);
+                    Block ghost=new Block(orangeghost, x, y, tilesize, tilesize);
                     ghosts.add(ghost);
                 }
                 else if(tilemapchar=='p'){//pinkghost
-                    Block ghost=new Block(pinkghost, x, y, x, y);
+                    Block ghost=new Block(pinkghost, x, y, tilesize, tilesize);
                     ghosts.add(ghost);
                 }
                 else if(tilemapchar=='r'){//blueghost
-                    Block ghost=new Block(redghost, x, y, x, y);
+                    Block ghost=new Block(redghost, x, y, tilesize, tilesize);
                     ghosts.add(ghost);
                 }
                 else if(tilemapchar=='P'){
@@ -131,10 +134,10 @@ public class Pacman extends JPanel{
         for(Block ghost:ghosts){
             g.drawImage(ghost.image, ghost.x, ghost.y, ghost.width, ghost.height, null);
         }
-
         for(Block wall:walls){
             g.drawImage(wall.image, wall.x, wall.y, wall.width, wall.height, null);
         }
+
         g.setColor(Color.WHITE);
         for(Block food:foods){
             g.fillRect(food.x, food.y, food.width, food.height);
