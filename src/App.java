@@ -14,6 +14,7 @@ public class App{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(boardwidth,boardheight);
         frame.pack();
+        pacmanGame.requestFocus();
         frame.setVisible(true);
 
 
